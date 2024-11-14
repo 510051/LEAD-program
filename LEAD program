@@ -1,1 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>围棋游戏 (19x19)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;  
+      margin: 0;
+      background-color: #faf9f9;
+    }
+    canvas {
+      border: 2px solid #333;
+      background-color: #f0d9b5;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="goBoard"></canvas>
+
+  <script>
+    const canvas = document.getElementById("goBoard");
+    const ctx = canvas.getContext("2d");
+    const boardSize = 19;
+    const cellSize = 30;
+    const gridMargin = 20;
+
+    const black = "black";
+    const white = "white";
+    const empty = null;
+
+    canvas.width = boardSize * cellSize + gridMargin * 2;
+    canvas.height = boardSize * cellSize + gridMargin * 2;
+
+    const board = Array.from({ length: boardSize }, () => Array(boardSize).fill(empty));
+
+    let currentPlayer = black; // 轮到黑棋
+
+    // 绘制棋盘
+    function drawBoard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // 绘制网格
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < boardSize; i++) {
+        ctx.beginPath();
+        ctx.moveTo(gridMargin + i * cellSize, gridMargin);
+        ctx.lineTo(gridMargin + i * cellSize, gridMargin + (boardSize - 1) * cellSize);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(gridMargin, gridMargin + i * cellSize);
+        ctx.lineTo(gridMargin + (boardSize - 1) * cellSize, gridMargin + i * cellSize);
+        ctx.stroke();
+      }
+
+      // 绘制星位
+      ctx.fillStyle = "black";
+      const starPositions = [
+        [3, 3], [3, 9], [3, 15],
+        [9, 3], [9, 9], [9, 15],
+        [15, 3], [15, 9], [15, 15]
+      ];
+      starPositions.forEach(([x, y]) => {
+        ctx.beginPath();
+        ctx.arc(gridMargin + x * cellSize, gridMargin + y * cellSize, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // 绘制棋子
+    function drawPieces() {
+      for (let row = 0; row < boardSize; row++) {
+        for (let col = 0; col < boardSize; col++) {
+          const piece = board[row][col];
+          if (piece) {
+            ctx.beginPath();
+            ctx.arc(gridMargin + col * cellSize, gridMargin + row * cellSize, cellSize / 2 - 2, 0, Math.PI * 2);
+            ctx.fillStyle = piece;
+            ctx.fill();
+            ctx.closePath();
+          }
+        }
+      }
+    }
+
+    // 检查是否在棋盘范围内
+    function isInBounds(x, y) {
+      return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
+    }
+
+    // 判断组是否有气
+    function hasLiberties(x, y) {
+      const color = board[y][x];
+      const visited = Array.from({ length: boardSize }, () => Array(boardSize).fill(false));
+      const stack = [[x, y]];
+      let liberties = 0;
+
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
+        if (visited[cy][cx]) continue;
+
+        visited[cy][cx] = true;
+
+        const directions = [
+          [-1, 0], [1, 0], [0, -1], [0, 1]
+        ];
+
+        directions.forEach(([dx, dy]) => {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (isInBounds(nx, ny)) {
+            if (board[ny][nx] === color && !visited[ny][nx]) {
+              stack.push([nx, ny]);
+            } else if (board[ny][nx] === empty) {
+              liberties++;
+            }
+          }
+        });
+      }
+
+      return liberties > 0;
+    }
+
+    // 检查捕获
+    function checkCapture(x, y, color) {
+      const directions = [
+        [-1, 0], [1, 0], [0, -1], [0, 1]
+      ];
+      const opponentColor = color === black ? white : black;
+
+      for (let i = 0; i < directions.length; i++) {
+        const [dx, dy] = directions[i];
+        const nx = x + dx;
+        const ny = y + dy;
+
+        if (isInBounds(nx, ny) && board[ny][nx] === opponentColor && !hasLiberties(nx, ny)) {
+          captureGroup(nx, ny);
+        }
+      }
+    }
+
+    // 捕获对方的棋子
+    function captureGroup(x, y) {
+      const color = board[y][x];
+      const visited = Array.from({ length: boardSize }, () => Array(boardSize).fill(false));
+      const stack = [[x, y]];
+      const captured = [];
+
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
+        if (visited[cy][cx]) continue;
+
+        visited[cy][cx] = true;
+        captured.push([cx, cy]);
+
+        const directions = [
+          [-1, 0], [1, 0], [0, -1], [0, 1]
+        ];
+
+        directions.forEach(([dx, dy]) => {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (isInBounds(nx, ny) && board[ny][nx] === color && !visited[ny][nx]) {
+            stack.push([nx, ny]);
+          }
+        });
+      }
+
+      // 清除捕获的棋子
+      captured.forEach(([cx, cy]) => {
+        board[cy][cx] = empty;
+      });
+    }
+
+    // 玩家下棋
+    function placePiece(x, y, color) {
+      if (board[y][x] === empty) {
+        board[y][x] = color;
+        checkCapture(x, y, color);  // 检查是否有棋子被提
+        currentPlayer = (color === black) ? white : black;
+      }
+    }
+
+    // 处理点击事件
+    canvas.addEventListener("click", (e) => {
+      const x = Math.floor((e.offsetX - gridMargin + cellSize / 2) / cellSize);
+      const y = Math.floor((e.offsetY - gridMargin + cellSize / 2) / cellSize);
+      if (isInBounds(x, y) && board[y][x] === empty) {
+        placePiece(x, y, currentPlayer);
+        draw();
+      }
+    });
+
+    // 绘制棋盘和棋子
+    function draw() {
+      drawBoard();
+      drawPieces();
+    }
+
+    // 初始化并开始
+    function startGame() {
+      draw();
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
 
