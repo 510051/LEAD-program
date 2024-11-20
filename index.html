@@ -2,25 +2,112 @@
 <html lang="en">
 <head>
     <style>
-        body{
-            background: black;
+        /* 页面和背景样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif; /* 使用更加清爽的字体 */
         }
-        h2{
-            background: rgb(71, 77, 200);
+
+        /* 动态背景容器 */
+        .animated-bg {
+            position: absolute; /* 使背景固定在页面底层 */
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -1; /* 保证背景在最底层 */
+            background: linear-gradient(135deg, 
+                #ff9a9e, 
+                #fad0c4, 
+                #fbc2eb, 
+                #a18cd1, 
+                #8ec5fc, 
+                #e0c3fc, 
+                #9be15d, 
+                #ff7e5f, 
+                #feb47b, 
+                #ff6e7f
+            );
+            background-size: 400% 400%; /* 设置渐变背景大小 */
+            animation: smoothFlow 40s linear infinite; /* 设置渐变动画 */
+        }
+
+        /* 动画效果 */
+        @keyframes smoothFlow {
+            0% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        /* 内容样式 */
+        .content {
+            position: relative; /* 内容层级高于背景 */
+            display: grid;
+            place-items: center;
+            height: 100%;
+            color: white;
+            text-align: center;
+            padding: 10px; /* 增加一些内边距 */
+        }
+
+        h1 {
+            font-size: 3rem; /* 适当减小字体 */
+            font-weight: 600; /* 使用更清晰的字体粗细 */
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* 更柔和的阴影 */
+            letter-spacing: 1px; /* 增加字间距，使文本更清晰 */
+        }
+
+        p {
+            font-size: 1.25rem; /* 适当减小字体 */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); /* 更柔和的阴影 */
+            letter-spacing: 0.5px; /* 增加字间距 */
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: none;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px; /* 更圆的按钮 */
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 增加阴影的效果 */
+        }
+
+        button:focus {
+            outline: none;
         }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEAD program</title>
+    <title>Diagonal Smooth Gradient</title>
 </head>
 <body>
-    <h2>Welcome to diversity game</h2>
-    
-    <h1></h1>
-    <p>This is a game about diversity and inclusion</p>
-    <button onclick="window.location.href='recipes.js'">Get started</button>
-    
+    <!-- 动态背景 -->
+    <div class="animated-bg"></div>
 
+    <!-- 页面内容 -->
+    <div class="content">
+        <h1>Welcome to the Diversity Game</h1>
+        <p>Explore the beauty of inclusion and harmony.</p>
+        <button onclick="window.location.href='chess.html'">Get Started</button>
+    </div>
 </body>
 </html>
-  
