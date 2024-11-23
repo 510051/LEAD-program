@@ -10,18 +10,52 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;  /* 使内容垂直排列 */
       height: 100vh;  
-      margin: 0;
+      margin: 100;
       background-color: #faf9f9;
     }
-    canvas {
+    #goBoard {
       border: 2px solid #333;
       background-color: #f0d9b5;
+      margin-bottom: 20px; /* 设置棋盘和按钮之间的间距 */
     }
+    #buttons {
+      display: flex; /* 启用 flexbox 布局 */
+      justify-content: center; /* 水平居中按钮 */
+      align-items: center; /* 垂直居中按钮 */
+      margin-top: 20px; /* 按钮和棋盘之间的间距 */
+      gap: 50px; /* 按钮之间的间隔 */
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #1102027e;
+      color: white;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #8273737e; /* 鼠标悬停时颜色变化 */
+    }
+    button:active {
+      transform: scale(0.95); /* 点击时按钮缩小 */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 点击时添加阴影 */
+    }
+
+    
   </style>
 </head>
 <body>
   <canvas id="goBoard"></canvas>
+  <div id="buttons">
+    <button id="undoButton">《</button>
+    <button id="redoButton">》</button>
+  </div>
+  
 
   <script>
     const canvas = document.getElementById("goBoard");
@@ -29,6 +63,9 @@
     const boardSize = 19;
     const cellSize = 30;
     const gridMargin = 20;
+    const undoStack = [];
+    const redoStack = [];
+
 
     const black = "black";
     const white = "white";
@@ -40,6 +77,52 @@
     const board = Array.from({ length: boardSize }, () => Array(boardSize).fill(empty));
 
     let currentPlayer = black; // 轮到黑棋
+
+    canvas.addEventListener("click", (e) => {
+      const x = Math.floor((e.offsetX - gridMargin + cellSize / 2) / cellSize);
+      const y = Math.floor((e.offsetY - gridMargin + cellSize / 2) / cellSize);
+
+      if (isInBounds(x, y) && board[y][x] === empty) {
+        // 保存当前状态到 undoStack
+        undoStack.push(board.map(row => row.slice()));
+
+        // 清空 redoStack
+        redoStack.length = 0;
+
+        // 放置棋子并绘制
+        placePiece(x, y, currentPlayer);
+        draw();
+      }
+    });
+
+
+    document.getElementById("undoButton").addEventListener("click", () => {
+      if (undoStack.length > 0) {
+        redoStack.push(board.map(row => row.slice()));
+        const lastState = undoStack.pop();
+        for (let row = 0; row < boardSize; row++) {
+          for (let col = 0; col < boardSize; col++) {
+            board[row][col] = lastState[row][col];
+          }
+        }
+        currentPlayer = (currentPlayer === black) ? white : black;
+        draw();
+      }
+    });
+
+    document.getElementById("redoButton").addEventListener("click", () => {
+      if (redoStack.length > 0) {
+        undoStack.push(board.map(row => row.slice()));
+        const nextState = redoStack.pop();
+        for (let row = 0; row < boardSize; row++) {
+          for (let col = 0; col < boardSize; col++) {
+            board[row][col] = nextState[row][col];
+          }
+        }
+        currentPlayer = (currentPlayer === black) ? white : black;
+        draw();
+      }
+    });
 
     // 绘制棋盘
     function drawBoard() {
@@ -196,6 +279,46 @@
       }
     });
 
+    function placePiece(x, y, color) {
+      if (board[y][x] === empty) {
+        board[y][x] = color;
+
+        // 更新最后一步的位置
+        lastMove = [y, x];
+
+        checkCapture(x, y, color); // 检查是否有棋子被提
+        currentPlayer = (color === black) ? white : black;
+      }
+    }
+
+
+    let lastMove = [null, null]; // 用于记录最后一步的位置
+
+    function drawPieces() {
+      for (let row = 0; row < boardSize; row++) {
+        for (let col = 0; col < boardSize; col++) {
+          const piece = board[row][col];
+          if (piece) {
+            ctx.beginPath();
+            ctx.arc(gridMargin + col * cellSize, gridMargin + row * cellSize, cellSize / 2 - 2, 0, Math.PI * 2);
+            ctx.fillStyle = piece;
+            ctx.fill();
+            ctx.closePath();
+
+            // 标记最后一步
+            if (lastMove[0] === row && lastMove[1] === col) {
+              ctx.strokeStyle = "red";
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+    }
+
+    
+
+
     // 绘制棋盘和棋子
     function draw() {
       drawBoard();
@@ -211,4 +334,6 @@
   </script>
 </body>
 </html>
+
+
 
