@@ -428,6 +428,10 @@ window.addEventListener('load', loadProgress);
             e.stopPropagation();
             e.preventDefault();
         }
+        document.body.addEventListener("click", playColor);
+    document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
+</script>
+<script>
 
         // In the dragStart function, set the dataTransfer to include 'Inclusion' when the element is dragged
 function dragStart(e) {
@@ -452,6 +456,13 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Culture');
        addToElements('Race');
        addToElements('Identity');
+    }
+    if (elementName === 'LGBTQ') {
+        // Add the four new elements
+       addToElements('Men');
+       addToElements('Women');
+       addToElements('Identify As Men');
+       addToElements('Identify As Women');
     }
 });
 
