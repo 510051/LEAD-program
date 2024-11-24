@@ -269,16 +269,7 @@
         currentPlayer = (color === black) ? white : black;
       }
     }
-
-    // 处理点击事件
-    canvas.addEventListener("click", (e) => {
-      const x = Math.floor((e.offsetX - gridMargin + cellSize / 2) / cellSize);
-      const y = Math.floor((e.offsetY - gridMargin + cellSize / 2) / cellSize);
-      if (isInBounds(x, y) && board[y][x] === empty) {
-        placePiece(x, y, currentPlayer);
-        draw();
-      }
-    });
+    
 
     function placePiece(x, y, color) {
       if (board[y][x] === empty) {
@@ -357,8 +348,33 @@
           e.stopPropagation();
           e.preventDefault();
       }
-      document.body.addEventListener("click", playColor);
-        document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
+      
+        canvas.AddEventListener("click", (e) => {
+  const x = e.offsetX;
+  const y = e.offsetY;
+
+  // 检查是否在棋盘范围内
+  const boardLeft = gridMargin;
+  const boardTop = gridMargin;
+  const boardRight = gridMargin + (boardSize - 1) * cellSize;
+  const boardBottom = gridMargin + (boardSize - 1) * cellSize;
+
+  if (x >= boardLeft && x <= boardRight && y >= boardTop && y <= boardBottom) {
+    // 棋盘范围内，触发棋子放置逻辑
+    const boardX = Math.floor((x - gridMargin + cellSize / 2) / cellSize);
+    const boardY = Math.floor((y - gridMargin + cellSize / 2) / cellSize);
+
+    if (isInBounds(boardX, boardY) && board[boardY][boardX] === empty) {
+      placePiece(boardX, boardY, currentPlayer);
+      draw();
+    }
+  } else {
+    // 棋盘范围外，触发动画
+    document.body.AccessKey("click", playColor);
+    document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
+    
+  }
+});
     </script>
 </body>
 </html>

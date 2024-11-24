@@ -176,13 +176,62 @@
 
 
         const recipes = {
-          "Gender,Culture": "Gender Norms",
-        "Gender,Race": "Intersectionality",
-        "Gender,Identity": "Personality",
-        "Culture,Race": "Intersectionality",
-        "Culture,Identity": "Cultural Identity"
+    "Gender,Culture": "GenderNorms",
+    "Gender,Race": "Intersectionality",
+    "Gender,Identity": "Personality",
+    "Culture,Identity": "CulturalIdentity",
+    "Race,Identity": "RacialIdentity",
+    "Intersectionality,Identity": "SelfRecognition",
+    "Gender,SelfRecognition": "LGBTQ",
+    "Personality,SelfRecognition": "SexualOrientation",
+    "Homosexuality,Men": "Gay",
+    "Homosexuality,Women": "Lesbian",
+    "Transgender,Gay": "TransgenderGayMen",
+    "Transgender,Lesbian": "TransgenderLesbianWomen",
+    "Cisgender,Gay": "CisgenderGayMen",
+    "Cisgender,Lesbian": "CisgenderLesbianWomen",
+    "Identity,Personality": "People",
+    "Experience,Personality": "Memory",
+    "Memory,Experience": "Knowledge",
+    "Knowledge,Culture": "Language",
+    "Language,Culture": "Ethnicity",
+    "Ethnicity,Memory": "History",
+    "History,Culture": "Tradition",
+    "Tradition,Experience": "Custom",
+    "Identity,People": "Status",
+    "Personality,People": "Experience",
+    "Men,Men": "Gay",
+    "Women,Women": "Lesbian",
+    "People,People": "Diversity",
+    "Men,Women": "Diversity",
+    "LGBTQ,LGBTQ": "Diversity",
+    "Status,People": "Hierarchy",
+    "Hierarchy,Status": "Rich",
+    "Rich,Socialclass": "UpperClass",
+    "Rich,People": "Privilege",
+    "Privilege,Privilege": "Disparity",
+    "Disparity,Rich": "Poor",
+    "Poor,Rich": "Exclusion",
+    "People,Exclusion": "Minority",
+    "People,Inclusion": "Majority",
+    "Majority,Minority": "Society",
+    "Minority,Minority": "Stereotype",
+    "Minority,Stereotype": "Stigmatization",
+    "Poor,Socialclass": "LowerClass",
+    "Society,Society": "Diversity",
+    "Hierarchy,Hierarchy": "Socialclass",
+    "Society,Disparity": "Inequality",
+    "Diversity,Inclusion": "Harmony",
+    "Diversity,Exclusion": "Conflict",
+    "Engagement,Action": "Participation",
+    "Leadership,Dialogue": "Communication",
+    "Communication,Participation": "Harmony",
+    "Race,Conflict": "Racism",
+    "Race,Inequality": "Racism",
+    "Racism,Stereotype": "Prejudice",
+    "Diversity,Diversity": "NYUSH"
+}
 
-    };
 
 
     function addDragListeners(element) {
@@ -430,8 +479,7 @@ window.addEventListener('load', loadProgress);
         }
         document.body.addEventListener("click", playColor);
     document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
-</script>
-<script>
+
 
         // In the dragStart function, set the dataTransfer to include 'Inclusion' when the element is dragged
 function dragStart(e) {
@@ -448,7 +496,6 @@ workspace.addEventListener('drop', (event) => {
 
     // If the dragged element is "Inclusion", replace it with the four initial elements
     if (elementName === 'Inclusion') {
-        elements.innerHTML = ''; 
         workspace.innerHTML = ''; // Clear the workspace
         
         // Add the four new elements
@@ -463,6 +510,32 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Women');
        addToElements('Identify As Men');
        addToElements('Identify As Women');
+       addToElements('Transgender');
+       addToElements('Non-binary');
+       addToElements('Cisgender');
+       addToElements('Gender Non-Conforming');
+      
+    }
+    if (elementName === 'Sexual Orientation') {
+        // Add the four new elements
+       addToElements('Heterosexual');
+       addToElements('Homosexuality');
+       addToElements('Pansexuality');
+       addToElements('Bisexuality');
+       addToElements('Queer');
+       addToElements('Asexuality');
+       addToElements('Two-Spirit');
+       addToElements('Intersex');
+       addToElements('Questioning');
+       addToElements('Same-Gender Loving');
+    }
+    if (elementName === 'Diversity') {
+        // Add the four new elements
+       addToElements('Leadership');
+       addToElements('Engagement');
+       addToElements('Action');
+       addToElements('Dialogue');
+     
     }
 });
 
