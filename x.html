@@ -131,6 +131,10 @@
             width: 100%;
             margin-top: 5px;
         }
+        #hintButton{
+            width: 15%;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -152,7 +156,12 @@
         </div>
         <div id="workspace-container">
             <h3>Drag elements here to combine</h3>
-            <div id="workspace"></div>
+            <button id="hintButton">Hint</button>
+            
+            <div id="workspace">
+    <!-- 动态元素可以放在这里 -->
+</div>
+
         </div>
     </div>
     <div id="contextMenu" class="context-menu">
@@ -180,6 +189,8 @@
     "Gender,Race": "Intersectionality",
     "Gender,Identity": "Personality",
     "Culture,Identity": "CulturalIdentity",
+    "Culture,Race": "Ethnicity",
+    "Race,Culture": "Ethnicity",
     "Race,Identity": "RacialIdentity",
     "Intersectionality,Identity": "SelfRecognition",
     "Gender,SelfRecognition": "LGBTQ",
@@ -499,6 +510,48 @@ function resetProgress() {
     }
 }
 
+
+// 获取工作区 DOM 元素
+const workspaces = document.getElementById('workspace');
+
+// 初始化工作区元素数组
+let workspaceElements = Array.from(workspaces.children).map(child => child.textContent.trim());
+
+// 监听 DOM 变化
+const observer = new MutationObserver(() => {
+    // 更新工作区内容
+    workspaceElements = Array.from(workspaces.children).map(child => child.textContent.trim());
+    console.log("Updated Workspace Elements:", workspaceElements);
+
+    // 动态提示
+    const hint = findHint(workspaceElements, combinations);
+    console.log("Hint:", hint)});
+
+
+
+// 配置监听选项（监控子节点变化）
+observer.observe(workspaces, { childList: true });
+// 查找可组合元素
+function findHint(elements, combinations) {
+    for (let i = 0; i < elements.length; i++) {
+        for (let j = i + 1; j < elements.length; j++) {
+            const key1 = `${elements[i]},${elements[j]}`;
+            const key2 = `${elements[j]},${elements[i]}`;
+            if (combinations[key1] || combinations[key2]) {
+                return `${elements[i]} + ${elements[j]} = ${combinations[key1] || combinations[key2]}`;
+            }
+        }
+    }
+    return "No combinations found!";
+}
+
+// 更新提示按钮事件
+document.getElementById("hintButton").addEventListener("click", () => {
+    const hint = findHint(workspaceElements, recipes);
+    alert(hint);
+});
+
+
 // Add event listeners for save, load, and reset buttons
 document.getElementById('save-button').addEventListener('click', saveProgress);
 document.getElementById('load-button').addEventListener('click', loadProgress);
@@ -570,7 +623,7 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Gender Non-Conforming');
       
     }
-    if (elementName === 'Sexual Orientation') {
+    if (elementName === 'SexualOrientation') {
         // Add the four new elements
        addToElements('Heterosexual');
        addToElements('Homosexuality');
