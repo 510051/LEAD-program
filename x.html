@@ -510,46 +510,53 @@ function resetProgress() {
     }
 }
 
-
-// 获取工作区 DOM 元素
 const workspaces = document.getElementById('workspace');
+let usedCombinations = new Set(); // Tracks already combined pairs
+let workspaceElements = []; // Store current workspace elements
 
-// 初始化工作区元素数组
-let workspaceElements = Array.from(workspaces.children).map(child => child.textContent.trim());
+// Assuming 'recipes' is defined elsewhere
+// Example: let recipes = { "element1,element2": "result1", "element2,element1": "result2", ... };
 
-// 监听 DOM 变化
+// Monitor workspace for changes
 const observer = new MutationObserver(() => {
-    // 更新工作区内容
     workspaceElements = Array.from(workspaces.children).map(child => child.textContent.trim());
     console.log("Updated Workspace Elements:", workspaceElements);
 
     // 动态提示
-    const hint = findHint(workspaceElements, combinations);
-    console.log("Hint:", hint)});
+    const hint = findHint(workspaceElements, recipes, usedCombinations);
+    console.log("Hint:", hint);
+});
 
-
-
-// 配置监听选项（监控子节点变化）
+// Start observing workspace
 observer.observe(workspaces, { childList: true });
-// 查找可组合元素
-function findHint(elements, combinations) {
+
+// Function to generate a hint
+function findHint(elements, recipes, usedCombinations) {
     for (let i = 0; i < elements.length; i++) {
         for (let j = i + 1; j < elements.length; j++) {
-            const key1 = `${elements[i]},${elements[j]}`;
-            const key2 = `${elements[j]},${elements[i]}`;
-            if (combinations[key1] || combinations[key2]) {
-                return `${elements[i]} + ${elements[j]} = ${combinations[key1] || combinations[key2]}`;
+            const pair1 = `${elements[i]},${elements[j]}`;
+            const pair2 = `${elements[j]},${elements[i]}`;
+
+            // Check if the pair has already been used
+            if (!usedCombinations.has(pair1) && recipes[pair1]) {
+                usedCombinations.add(pair1);
+                return `Combine ${elements[i]} and ${elements[j]} to form ${recipes[pair1]}`;
+            }
+            if (!usedCombinations.has(pair2) && recipes[pair2]) {
+                usedCombinations.add(pair2);
+                return `Combine ${elements[j]} and ${elements[i]} to form ${recipes[pair2]}`;
             }
         }
     }
-    return "No combinations found!";
+    return "No valid combination found.";
 }
 
-// 更新提示按钮事件
+// Hint button functionality
 document.getElementById("hintButton").addEventListener("click", () => {
-    const hint = findHint(workspaceElements, recipes);
+    const hint = findHint(workspaceElements, recipes, usedCombinations);
     alert(hint);
 });
+
 
 
 // Add event listeners for save, load, and reset buttons
