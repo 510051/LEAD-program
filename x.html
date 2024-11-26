@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="1.webp">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>little alchemy game</title>
@@ -617,6 +618,10 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Culture');
        addToElements('Race');
        addToElements('Identity');
+       workspace.appendChil('Gender');
+       workspace.appendChil('Culture');
+       workspace.appendChil('Race');
+       workspace.appendChil('Identity');
     }
     if (elementName === 'LGBTQ') {
         // Add the four new elements
@@ -628,6 +633,14 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Non-binary');
        addToElements('Cisgender');
        addToElements('Gender Non-Conforming');
+       workspace.appendChil('Men');
+       workspace.appendChil('Women');
+       workspace.appendChil('Identify As Men');
+       workspace.appendChil('Identify As Women');
+       workspace.appendChil('Transgender');
+       workspace.appendChil('Non-binary');
+       workspace.appendChil('Cisgender');
+       workspace.appendChil('Gender Non-Conforming');
       
     }
     if (elementName === 'SexualOrientation') {
@@ -642,6 +655,16 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Intersex');
        addToElements('Questioning');
        addToElements('Same-Gender Loving');
+       workspace.appendChil('Heterosexual');
+       workspace.appendChil('Homosexuality');
+       workspace.appendChil('Pansexuality');
+       workspace.appendChil('Bisexuality');
+       workspace.appendChil('Queer');
+       aworkspace.appendChil('Asexuality');
+       workspace.appendChil('Two-Spirit');
+       workspace.appendChil('Intersex');
+       workspace.appendChil('Questioning');
+       workspace.appendChil('Same-Gender Loving');
     }
     if (elementName === 'Diversity') {
         // Add the four new elements
@@ -649,6 +672,10 @@ workspace.addEventListener('drop', (event) => {
        addToElements('Engagement');
        addToElements('Action');
        addToElements('Dialogue');
+       workspace.appendChil('Leadership');
+       workspace.appendChil('Engagement');
+       workspace.appendChil('Action');
+       workspace.appendChil('Dialogue');
      
     }
 });
