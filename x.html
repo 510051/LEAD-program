@@ -182,6 +182,7 @@
         let draggedElement = null;
         let contextMenuTarget = null;
         let isDraggingWorkspaceElement = false;
+        const usedSpecialElements = new Set();
         
 
 
@@ -309,11 +310,101 @@
 elements.querySelectorAll('.element').forEach(addDragListeners);
 
 workspace.addEventListener('dragover', dragOver);
-workspace.addEventListener('drop', drop);
+workspace.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const elementName = event.dataTransfer.getData('element');
+
+    // 检查是否是特殊元素
+    const isSpecialElement = ['Inclusion', 'LGBTQ', 'SexualOrientation', 'Diversity'].includes(elementName);
+    
+    if (isSpecialElement) {
+        // 如果是特殊元素且未使用过，执行特殊处理
+        if (!usedSpecialElements.has(elementName)) {
+            usedSpecialElements.add(elementName);
+            workspace.innerHTML = '';
+            
+            if (elementName === 'Inclusion') {
+                const elements = ['Gender', 'Culture', 'Race', 'Identity'];
+                elements.forEach((element, index) => {
+                    addToElements(element);
+                    const workspaceElement = createWorkspaceElement(element);
+                    workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
+                    workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
+                    workspace.appendChild(workspaceElement);
+                });
+            }
+            
+            if (elementName === 'LGBTQ') {
+                const lgbtqElements = [
+                    'Men', 'Women', 'Identify As Men', 'Identify As Women',
+                    'Transgender', 'Non-binary', 'Cisgender', 'Gender Non-Conforming'
+                ];
+                
+                lgbtqElements.forEach((element, index) => {
+                    addToElements(element);
+                    const workspaceElement = createWorkspaceElement(element);
+                    workspaceElement.style.left = `${(index % 4) * 150 + 50}px`;
+                    workspaceElement.style.top = `${Math.floor(index / 4) * 100 + 50}px`;
+                    workspace.appendChild(workspaceElement);
+                });
+            }
+            
+            if (elementName === 'SexualOrientation') {
+                const orientationElements = [
+                    'Heterosexual', 'Homosexuality', 'Pansexuality', 'Bisexuality',
+                    'Queer', 'Asexuality', 'Two-Spirit', 'Intersex',
+                    'Questioning', 'Same-Gender Loving'
+                ];
+                
+                orientationElements.forEach((element, index) => {
+                    addToElements(element);
+                    const workspaceElement = createWorkspaceElement(element);
+                    workspaceElement.style.left = `${(index % 5) * 150 + 50}px`;
+                    workspaceElement.style.top = `${Math.floor(index / 5) * 100 + 50}px`;
+                    workspace.appendChild(workspaceElement);
+                });
+            }
+            
+            if (elementName === 'Diversity') {
+                const diversityElements = ['Leadership', 'Engagement', 'Action', 'Dialogue'];
+                
+                diversityElements.forEach((element, index) => {
+                    addToElements(element);
+                    const workspaceElement = createWorkspaceElement(element);
+                    workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
+                    workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
+                    workspace.appendChild(workspaceElement);
+                });
+            }
+        }
+        // 如果特殊元素已经使用过，不做任何处理
+        return;
+    }
+    
+    // 处理普通元素的拖放
+    if (draggedElement) {
+        const rect = workspace.getBoundingClientRect();
+        let x = event.clientX - rect.left + workspace.scrollLeft;
+        let y = event.clientY - rect.top + workspace.scrollTop;
+
+        if (isDraggingWorkspaceElement) {
+            draggedElement.style.left = `${x}px`;
+            draggedElement.style.top = `${y}px`;
+        } else {
+            const newElement = createWorkspaceElement(draggedElement.textContent);
+            newElement.style.left = `${x}px`;
+            newElement.style.top = `${y}px`;
+            workspace.appendChild(newElement);
+            draggedElement = newElement;
+        }
+
+        checkCombination(draggedElement);
+    }
+});
 
 function dragStart(e) {
     draggedElement = this;
-    e.dataTransfer.setData('text/plain', this.textContent);
+    e.dataTransfer.setData('element', this.textContent);
     setTimeout(() => this.style.opacity = '0.5', 0);
     isDraggingWorkspaceElement = this.classList.contains('workspace-element');
 }
@@ -331,28 +422,6 @@ function dragEnd() {
 
 function dragOver(e) {
     e.preventDefault();
-}
-
-function drop(e) {
-    e.preventDefault();
-    if (draggedElement) {
-        const rect = workspace.getBoundingClientRect();
-        let x = e.clientX - rect.left + workspace.scrollLeft;
-        let y = e.clientY - rect.top + workspace.scrollTop;
-
-        if (isDraggingWorkspaceElement) {
-            draggedElement.style.left = `${x}px`;
-            draggedElement.style.top = `${y}px`;
-        } else {
-            const newElement = createWorkspaceElement(draggedElement.textContent);
-            newElement.style.left = `${x}px`;
-            newElement.style.top = `${y}px`;
-            workspace.appendChild(newElement);
-            draggedElement = newElement;
-        }
-
-        checkCombination(draggedElement);
-    }
 }
 
 function checkCombination(newElement) {
@@ -458,7 +527,8 @@ function saveProgress() {
     }));
     const gameState = {
         discoveredElements: discoveredElements,
-        workspaceElements: workspaceElements
+        workspaceElements: workspaceElements,
+        usedSpecialElements: Array.from(usedSpecialElements)
     };
     localStorage.setItem('neilcraftState', JSON.stringify(gameState));
     alert('Progress saved successfully!');
@@ -469,25 +539,29 @@ function loadProgress() {
     if (savedState) {
         const gameState = JSON.parse(savedState);
         
-        // Clear current elements and workspace
         elements.innerHTML = '';
         workspace.innerHTML = '';
         if (!elementExists('Inclusion')) {
             addToElements('Inclusion');
         }
         
-        // Load discovered elements
         gameState.discoveredElements.forEach(elementName => {
             addToElements(elementName);
         });
         
-        // Load workspace elements
         gameState.workspaceElements.forEach(element => {
             const newElement = createWorkspaceElement(element.name);
             newElement.style.left = element.x;
             newElement.style.top = element.y;
             workspace.appendChild(newElement);
         });
+        
+        usedSpecialElements.clear();
+        if (gameState.usedSpecialElements) {
+            gameState.usedSpecialElements.forEach(element => {
+                usedSpecialElements.add(element);
+            });
+        }
         
         alert('Progress loaded successfully!');
     } else {
@@ -497,16 +571,11 @@ function loadProgress() {
 
 function resetProgress() {
     if (confirm('Are you sure you want to reset your progress? This action cannot be undone.')) {
-        // Clear local storage
         localStorage.removeItem('neilcraftState');
-        
-        // Reset elements to initial state
         elements.innerHTML = '';
         workspace.innerHTML = '';
-        
-        // Add initial elements
         addToElements('Inclusion');
-        
+        usedSpecialElements.clear();
         alert('Progress has been reset successfully!');
     }
 }
