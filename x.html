@@ -609,74 +609,61 @@ workspace.addEventListener('drop', (event) => {
     event.preventDefault();
     const elementName = event.dataTransfer.getData('element'); // Retrieve the element's name
 
-    // If the dragged element is "Inclusion", replace it with the four initial elements
     if (elementName === 'Inclusion') {
-        workspace.innerHTML = ''; // Clear the workspace
+        workspace.innerHTML = '';
         
-        // Add the four new elements
-       addToElements('Gender');
-       addToElements('Culture');
-       addToElements('Race');
-       addToElements('Identity');
-       workspace.appendChil('Gender');
-       workspace.appendChil('Culture');
-       workspace.appendChil('Race');
-       workspace.appendChil('Identity');
+        const elements = ['Gender', 'Culture', 'Race', 'Identity'];
+        
+        elements.forEach((element, index) => {
+            addToElements(element);
+            const workspaceElement = createWorkspaceElement(element);
+            workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
+            workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
+            workspace.appendChild(workspaceElement);
+        });
     }
+    
     if (elementName === 'LGBTQ') {
-        // Add the four new elements
-       addToElements('Men');
-       addToElements('Women');
-       addToElements('Identify As Men');
-       addToElements('Identify As Women');
-       addToElements('Transgender');
-       addToElements('Non-binary');
-       addToElements('Cisgender');
-       addToElements('Gender Non-Conforming');
-       workspace.appendChil('Men');
-       workspace.appendChil('Women');
-       workspace.appendChil('Identify As Men');
-       workspace.appendChil('Identify As Women');
-       workspace.appendChil('Transgender');
-       workspace.appendChil('Non-binary');
-       workspace.appendChil('Cisgender');
-       workspace.appendChil('Gender Non-Conforming');
-      
+        const lgbtqElements = [
+            'Men', 'Women', 'Identify As Men', 'Identify As Women',
+            'Transgender', 'Non-binary', 'Cisgender', 'Gender Non-Conforming'
+        ];
+        
+        lgbtqElements.forEach((element, index) => {
+            addToElements(element);
+            const workspaceElement = createWorkspaceElement(element);
+            workspaceElement.style.left = `${(index % 4) * 150 + 50}px`;
+            workspaceElement.style.top = `${Math.floor(index / 4) * 100 + 50}px`;
+            workspace.appendChild(workspaceElement);
+        });
     }
+    
     if (elementName === 'SexualOrientation') {
-        // Add the four new elements
-       addToElements('Heterosexual');
-       addToElements('Homosexuality');
-       addToElements('Pansexuality');
-       addToElements('Bisexuality');
-       addToElements('Queer');
-       addToElements('Asexuality');
-       addToElements('Two-Spirit');
-       addToElements('Intersex');
-       addToElements('Questioning');
-       addToElements('Same-Gender Loving');
-       workspace.appendChil('Heterosexual');
-       workspace.appendChil('Homosexuality');
-       workspace.appendChil('Pansexuality');
-       workspace.appendChil('Bisexuality');
-       workspace.appendChil('Queer');
-       aworkspace.appendChil('Asexuality');
-       workspace.appendChil('Two-Spirit');
-       workspace.appendChil('Intersex');
-       workspace.appendChil('Questioning');
-       workspace.appendChil('Same-Gender Loving');
+        const orientationElements = [
+            'Heterosexual', 'Homosexuality', 'Pansexuality', 'Bisexuality',
+            'Queer', 'Asexuality', 'Two-Spirit', 'Intersex',
+            'Questioning', 'Same-Gender Loving'
+        ];
+        
+        orientationElements.forEach((element, index) => {
+            addToElements(element);
+            const workspaceElement = createWorkspaceElement(element);
+            workspaceElement.style.left = `${(index % 5) * 150 + 50}px`;
+            workspaceElement.style.top = `${Math.floor(index / 5) * 100 + 50}px`;
+            workspace.appendChild(workspaceElement);
+        });
     }
+    
     if (elementName === 'Diversity') {
-        // Add the four new elements
-       addToElements('Leadership');
-       addToElements('Engagement');
-       addToElements('Action');
-       addToElements('Dialogue');
-       workspace.appendChil('Leadership');
-       workspace.appendChil('Engagement');
-       workspace.appendChil('Action');
-       workspace.appendChil('Dialogue');
-     
+        const diversityElements = ['Leadership', 'Engagement', 'Action', 'Dialogue'];
+        
+        diversityElements.forEach((element, index) => {
+            addToElements(element);
+            const workspaceElement = createWorkspaceElement(element);
+            workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
+            workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
+            workspace.appendChild(workspaceElement);
+        });
     }
 });
 
