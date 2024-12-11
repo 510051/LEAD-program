@@ -426,116 +426,114 @@
 
 
         const recipes = {
-    "Gender,Culture": "GenderNorms",
-    "Gender,Race": "Intersectionality",
-    "Gender,Identity": "Personality",
-    "Culture,Identity": "CulturalIdentity",
-    "Culture,Race": "Ethnicity",
-    "Race,Culture": "Ethnicity",
-    "Race,Identity": "RacialIdentity",
-    "Intersectionality,Identity": "SelfRecognition",
-    "Gender,SelfRecognition": "LGBTQ",
-    "Personality,SelfRecognition": "SexualOrientation",
-    "Homosexuality,Men": "Gay",
-    "Homosexuality,Women": "Lesbian",
-    "Transgender,Gay": "TransgenderGayMen",
-    "Transgender,Lesbian": "TransgenderLesbianWomen",
-    "Cisgender,Gay": "CisgenderGayMen",
-    "Cisgender,Lesbian": "CisgenderLesbianWomen",
-    "Identity,Personality": "People",
-    "Experience,Personality": "Memory",
-    "Memory,Experience": "Knowledge",
-    "Knowledge,Culture": "Language",
-    "Language,Culture": "Ethnicity",
-    "Ethnicity,Memory": "History",
-    "History,Culture": "Tradition",
-    "Tradition,Experience": "Custom",
-    "Identity,People": "Status",
-    "Personality,People": "Experience",
-    "Men,Men": "Gay",
-    "Women,Women": "Lesbian",
-    "People,People": "Diversity",
-    "Men,Women": "Diversity",
-    "LGBTQ,LGBTQ": "Diversity",
-    "Status,People": "Hierarchy",
-    "Hierarchy,Status": "Rich",
-    "Rich,Socialclass": "UpperClass",
-    "Rich,People": "Privilege",
-    "Privilege,Privilege": "Disparity",
-    "Disparity,Rich": "Poor",
-    "Poor,Rich": "Exclusion",
-    "People,Exclusion": "Minority",
-    "People,Inclusion": "Majority",
-    "Majority,Minority": "Society",
-    "Minority,Minority": "Stereotype",
-    "Minority,Stereotype": "Stigmatization",
-    "Poor,Socialclass": "LowerClass",
-    "Society,Society": "Diversity",
-    "Hierarchy,Hierarchy": "Socialclass",
-    "Society,Disparity": "Inequality",
-    "Diversity,Inclusion": "Harmony",
-    "Diversity,Exclusion": "Conflict",
-    "Engagement,Action": "Participation",
-    "Leadership,Dialogue": "Communication",
-    "Communication,Participation": "Harmony",
-    "Race,Conflict": "Racism",
-    "Race,Inequality": "Racism",
-    "Racism,Stereotype": "Prejudice",
-    "Culture,Gender": "GenderNorms",
-    "Race,Gender": "Intersectionality",
-    "Identity,Gender": "Personality",
-    "Identity,Culture": "CulturalIdentity",
-    "Identity,Race": "RacialIdentity",
-    "Identity,Intersectionality": "SelfRecognition",
-    "SelfRecognition,Gender": "LGBTQ",
-    "SelfRecognition,Personality": "SexualOrientation",
-    "Men,Homosexuality": "Gay",
-    "Women,Homosexuality": "Lesbian",
-    "Gay,Transgender": "TransgenderGayMen",
-    "Lesbian,Transgender": "TransgenderLesbianWomen",
-    "Gay,Cisgender": "CisgenderGayMen",
-    "Lesbian,Cisgender": "CisgenderLesbianWomen",
-    "Personality,Identity": "People",
-    "Personality,Experience": "Memory",
-    "Experience,Memory": "Knowledge",
-    "Culture,Knowledge": "Language",
-    "Culture,Language": "Ethnicity",
-    "Memory,Ethnicity": "History",
-    "Culture,History": "Tradition",
-    "Experience,Tradition": "Custom",
-    "People,Identity": "Status",
-    "People,Personality": "Experience",
-    "Men,Men": "Gay",
-    "Women,Women": "Lesbian",
-    "People,People": "Diversity",
-    "Women,Men": "Diversity",
-    "LGBTQ,LGBTQ": "Diversity",
-    "People,Status": "Hierarchy",
-    "Status,Hierarchy": "Rich",
-    "Socialclass,Rich": "UpperClass",
-    "People,Rich": "Privilege",
-    "Privilege,Privilege": "Disparity",
-    "Rich,Disparity": "Poor",
-    "Rich,Exclusion": "Poor",
-    "Exclusion,People": "Minority",
-    "Inclusion,People": "Majority",
-    "Minority,Majority": "Society",
-    "Minority,Minority": "Stereotype",
-    "Stereotype,Minority": "Stigmatization",
-    "Socialclass,Poor": "LowerClass",
-    "Society,Society": "Diversity",
-    "Hierarchy,Hierarchy": "Socialclass",
-    "Disparity,Society": "Inequality",
-    "Inclusion,Diversity": "Harmony",
-    "Exclusion,Diversity": "Conflict",
-    "Action,Engagement": "Participation",
-    "Dialogue,Leadership": "Communication",
-    "Participation,Communication": "Harmony",
-    "Conflict,Race": "Racism",
-    "Inequality,Race": "Racism",
-    "Stereotype,Racism": "Prejudice",
-    "Diversity,Diversity": "NYUSH"
-}
+            // 基础性别相关组合
+            "Gender,Culture": "GenderNorms",
+            "Gender,Race": "Intersectionality",
+            "Gender,Identity": "Personality",
+            "Men,Men": "Gay",
+            "Women,Women": "Lesbian",
+            "Men,Women": "Diversity",         // 性别多样性路径
+            
+            // 基础文化相关组合
+            "Culture,Identity": "CulturalIdentity",
+            "Culture,Race": "Ethnicity",
+            "Culture,Knowledge": "Language",
+            "Culture,History": "Tradition",
+            "Culture,Language": "Ethnicity",
+            "Tradition,Custom": "Diversity",  // 文化多样性路径
+            
+            // 基础种族相关组合
+            "Race,Identity": "RacialIdentity",
+            "Race,Culture": "Ethnicity",
+            "Race,Conflict": "Racism",
+            "Race,Inequality": "Racism",
+            "Ethnicity,Ethnicity": "Diversity",  // 种族多样性路径
+            
+            // 身份认同相关组合
+            "Identity,Intersectionality": "SelfRecognition",
+            "Identity,Personality": "People",
+            "Identity,People": "Status",
+            "SelfRecognition,Gender": "LGBTQ",
+            "SelfRecognition,Personality": "SexualOrientation",
+            "LGBTQ,LGBTQ": "Diversity",      // 性向多样性路径
+            
+            // 社会阶层相关组合
+            "People,Status": "Hierarchy",
+            "Status,Hierarchy": "Rich",
+            "Socialclass,Rich": "UpperClass",
+            "Socialclass,Poor": "LowerClass",
+            "UpperClass,LowerClass": "Diversity",  // 阶层多样性路径
+            
+            // 社会包容与排斥相关组合
+            "Exclusion,People": "Minority",
+            "Inclusion,People": "Majority",
+            "Minority,Majority": "Society",
+            "Society,Society": "Diversity",   // 社会多样性路径
+            
+            // 经验与知识相关组合
+            "Experience,Personality": "Memory",
+            "Experience,Memory": "Knowledge",
+            "Experience,Tradition": "Custom",
+            "Knowledge,Custom": "Culture",
+            "Culture,Culture": "Diversity",   // 知识文化多样性路径
+            
+            // 领导力与参与相关组合
+            "Action,Engagement": "Participation",
+            "Dialogue,Leadership": "Communication",
+            "Participation,Communication": "Harmony",
+            "Harmony,Harmony": "Diversity",   // 和谐多样性路径
+            
+            // 教育相关组合
+            "Knowledge,Experience": "Learning",
+            "Learning,Teaching": "Education",
+            "Education,Culture": "Academia",
+            "Education,Education": "Diversity",   // 教育多样性路径
+
+            // 语言相关组合
+            "Culture,Expression": "Language",
+            "Language,Identity": "MotherTongue",
+            "Language,Learning": "Bilingual",
+            "Bilingual,Bilingual": "Diversity",  // 语言多样性路径
+
+            // 艺术与表达相关组合
+            "Culture,Creativity": "Art",
+            "Art,Emotion": "Expression",
+            "Art,Culture": "Heritage",
+            "Art,Art": "Diversity",              // 艺术多样性路径
+
+            // 思维方式相关组合
+            "Knowledge,Perspective": "Mindset",
+            "Mindset,Culture": "Worldview",
+            "Mindset,Experience": "Philosophy",
+            "Worldview,Worldview": "Diversity",  // 思维多样性路径
+
+            // 年龄代际相关组合
+            "Experience,Time": "Age",
+            "Age,Knowledge": "Wisdom",
+            "Age,Culture": "Generation",
+            "Generation,Generation": "Diversity", // 代际多样性路径
+
+            // 职业相关组合
+            "Knowledge,Skill": "Profession",
+            "Experience,Training": "Expertise",
+            "Profession,Passion": "Career",
+            "Profession,Profession": "Diversity", // 职业多样性路径
+
+            // 家庭结构相关组合
+            "People,Love": "Family",
+            "Family,Culture": "Tradition",
+            "Family,Identity": "Heritage",
+            "Family,Family": "Diversity",        // 家庭多样性路径
+
+            // 能力相关组合
+            "Body,Mind": "Ability",
+            "Ability,Challenge": "Adaptation",
+            "Ability,Support": "Empowerment",
+            "Ability,Ability": "Diversity",      // 能力多样性路径
+
+            // 终极目标
+            "Diversity,Diversity": "NYUSH"    // 最终目标
+        };
 
 
 
@@ -552,58 +550,23 @@ workspace.addEventListener('drop', (event) => {
     event.preventDefault();
     const elementName = event.dataTransfer.getData('element');
 
-    const isSpecialElement = ['Inclusion', 'LGBTQ', 'SexualOrientation'].includes(elementName);
-    
-    if (isSpecialElement) {
-        if (!usedSpecialElements.has(elementName)) {
-            usedSpecialElements.add(elementName);
-            workspace.innerHTML = '';
-            
-            if (elementName === 'Inclusion') {
-                const elements = ['Gender', 'Culture', 'Race', 'Identity'];
-                elements.forEach((element, index) => {
-                    addToElements(element);
-                    const workspaceElement = createWorkspaceElement(element);
-                    workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
-                    workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
-                    workspace.appendChild(workspaceElement);
-                });
-            }
-            
-            if (elementName === 'LGBTQ') {
-                const lgbtqElements = [
-                    'Men', 'Women', 'Identify As Men', 'Identify As Women',
-                    'Transgender', 'Non-binary', 'Cisgender', 'Gender Non-Conforming'
-                ];
-                
-                lgbtqElements.forEach((element, index) => {
-                    addToElements(element);
-                    const workspaceElement = createWorkspaceElement(element);
-                    workspaceElement.style.left = `${(index % 4) * 150 + 50}px`;
-                    workspaceElement.style.top = `${Math.floor(index / 4) * 100 + 50}px`;
-                    workspace.appendChild(workspaceElement);
-                });
-            }
-            
-            if (elementName === 'SexualOrientation') {
-                const orientationElements = [
-                    'Heterosexual', 'Homosexuality', 'Pansexuality', 'Bisexuality',
-                    'Queer', 'Asexuality', 'Two-Spirit', 'Intersex',
-                    'Questioning', 'Same-Gender Loving'
-                ];
-                
-                orientationElements.forEach((element, index) => {
-                    addToElements(element);
-                    const workspaceElement = createWorkspaceElement(element);
-                    workspaceElement.style.left = `${(index % 5) * 150 + 50}px`;
-                    workspaceElement.style.top = `${Math.floor(index / 5) * 100 + 50}px`;
-                    workspace.appendChild(workspaceElement);
-                });
-            }
-        }
+    // 只处理 Inclusion 作为特殊拆分元素
+    if (elementName === 'Inclusion' && !usedSpecialElements.has(elementName)) {
+        usedSpecialElements.add(elementName);
+        workspace.innerHTML = '';
+        
+        const elements = ['Gender', 'Culture', 'Race', 'Identity'];
+        elements.forEach((element, index) => {
+            addToElements(element);
+            const workspaceElement = createWorkspaceElement(element);
+            workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
+            workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
+            workspace.appendChild(workspaceElement);
+        });
         return;
     }
     
+    // 其他元素（包括 LGBTQ 和 SexualOrientation）都按普通元素处理
     if (draggedElement) {
         const rect = workspace.getBoundingClientRect();
         let x = event.clientX - rect.left + workspace.scrollLeft;
