@@ -426,68 +426,65 @@
 
 
         const recipes = {
-            // 第一层 - 基础概念形成
-            "Gender,Culture": "Knowledge",        // 从性别和文化的交互获得知识
-            "Race,Identity": "Experience",        // 从种族和身份的交互获得经验
-            "Gender,Identity": "Mind",            // 从性别和身份的交互获得思维
-            "Culture,Identity": "Heart",          // 从文化和身份的交互获得情感
-            "Culture,Race": "Ethnicity",          // 从文化和种族的交互获得民族性
+            // 第一层 - 直接从基础元素获得
+            "Gender,Culture": "Knowledge",        // 从性别和文化获得知识
+            "Race,Identity": "Experience",        // 从种族和身份获得经验
+            "Culture,Identity": "Mind",           // 从文化和身份获得思维 - 修改
+            "Race,Culture": "Heart",              // 从种族和文化获得情感 - 修改
+            "Culture,Race": "Ethnicity",          // 保持不变
             
-            // 第二层 - 人与社会
-            "Mind,Heart": "Emotion",              // 思维和情感结合
+            // 第二层 - 基础组合
             "Knowledge,Experience": "Learning",    // 知识和经验结合
             "Mind,Knowledge": "Perspective",      // 思维和知识产生视角
-            "Heart,Experience": "Personality",    // 情感和经验形成个性
-            "Identity,Personality": "People",      // 身份和个性形成人
-            "People,Knowledge": "Action",         // 人和知识产生行动
+            "Heart,Experience": "Emotion",        // 修改：情感从经验产生
+            "Identity,Experience": "Personality", // 修改：个性从身份和经验产生
             
-            // 第三层 - 社会结构
+            // 第三层 - 人与社会形成
+            "Personality,Mind": "People",         // 修改：人从个性和思维产生
+            "People,Knowledge": "Action",         // 人和知识产生行动
             "People,Action": "Society",           // 人和行动形成社会
+            
+            // 第四层 - 社会结构
             "Society,Knowledge": "Status",        // 社会和知识产生地位
             "Status,Society": "Hierarchy",        // 地位和社会产生等级
-            "Hierarchy,Status": "Rich",           // 等级和地位产生富人
-            "Hierarchy,Society": "Poor",          // 等级和社会产生穷人
+            "Hierarchy,Knowledge": "Rich",        // 修改：等级和知识产生富人
+            "Hierarchy,Experience": "Poor",       // 修改：等级和经验产生穷人
             
-            // 第四层 - 社会阶层
+            // 第五层 - 社会阶层
             "Rich,Poor": "Socialclass",           // 贫富形成社会阶级
-            "Socialclass,Rich": "UpperClass",     // 社会阶级和富人形成上层阶级
-            "Socialclass,Poor": "LowerClass",     // 社会阶级和穷人形成下层阶级
+            "Socialclass,Rich": "UpperClass",     // 保持不变
+            "Socialclass,Poor": "LowerClass",     // 保持不变
             
-            // 第五层 - 社会互动
-            "Society,Heart": "Acceptance",        // 社会和情感产生接纳
-            "Society,Mind": "Rejection",          // 社会和思维产生排斥
-            "People,Acceptance": "Inclusion",     // 人和接纳产生包容
-            "People,Rejection": "Exclusion",      // 人和排斥产生排除
+            // 第六层 - 社会互动
+            "Society,Emotion": "Acceptance",      // 修改：社会和情感产生接纳
+            "Society,Perspective": "Rejection",   // 修改：社会和视角产生排斥
+            "People,Acceptance": "Inclusion",     // 保持不变
+            "People,Rejection": "Exclusion",      // 保持不变
             
-            // 第六层 - 性别认同
-            "Gender,Knowledge": "Men",            // 性别和知识产生男性
-            "Gender,Experience": "Women",         // 性别和经验产生女性
-            "Gender,Mind": "Transgender",         // 性别和思维产生跨性别
-            "Gender,Heart": "Cisgender",          // 性别和情感产生顺性别
-            
-            // 第七层 - 性取向
-            "Men,Men": "Gay",                     // 男性和男性
-            "Women,Women": "Lesbian",             // 女性和女性
-            "Heart,Gender": "SexualOrientation",  // 情感和性别产生性取向
+            // 第七层 - 性别认同
+            "Gender,Knowledge": "Men",            // 保持不变
+            "Gender,Experience": "Women",         // 保持不变
+            "Gender,Mind": "Transgender",         // 保持不变
+            "Gender,Heart": "Cisgender",          // 保持不变
             
             // 第八层 - 文化与艺术
-            "Culture,Heart": "Art",               // 文化和情感产生艺术
-            "Culture,Mind": "Language",           // 文化和思维产生语言
-            "Culture,Knowledge": "Tradition",     // 文化和知识产生传统
-            "Culture,Experience": "Custom",       // 文化和经验产生习俗
+            "Culture,Emotion": "Art",             // 修改：文化和情感产生艺术
+            "Culture,Mind": "Language",           // 保持不变
+            "Culture,Knowledge": "Tradition",     // 保持不变
+            "Culture,Experience": "Custom",       // 保持不变
             
             // 第九层 - 教育与发展
-            "Knowledge,Action": "Teaching",       // 知识和行动产生教学
-            "Learning,Teaching": "Education",     // 学习和教学产生教育
-            "Education,Society": "Academia",      // 教育和社会产生学术界
+            "Knowledge,Action": "Teaching",       // 保持不变
+            "Learning,Teaching": "Education",     // 保持不变
+            "Education,Society": "Academia",      // 保持不变
             
             // 第十层 - 领导力
-            "Action,Knowledge": "Skill",          // 行动和知识产生技能
-            "Skill,Society": "Leadership",        // 技能和社会产生领导力
-            "Leadership,Action": "Engagement",    // 领导力和行动产生参与
-            "Leadership,Heart": "Dialogue",       // 领导力和情感产生对话
+            "Action,Learning": "Skill",           // 修改：行动和学习产生技能
+            "Skill,Society": "Leadership",        // 保持不变
+            "Leadership,Action": "Engagement",    // 保持不变
+            "Leadership,Emotion": "Dialogue",     // 修改：领导力和情感产生对话
             
-            // 多样性路径
+            // 多样性路径 - 保持所有路径
             "Men,Women": "Diversity",             // 性别多样性
             "UpperClass,LowerClass": "Diversity", // 阶层多样性
             "Gay,Lesbian": "Diversity",           // 性向多样性
