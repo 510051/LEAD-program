@@ -157,12 +157,15 @@
         </div>
         <div id="workspace-container">
             <h3>Drag elements here to combine</h3>
-            <button id="hintButton">Hint</button>
-            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <button id="hintButton">Hint</button>
+                <div style="color: #666; font-style: italic;">
+                    Ultimate Goal: Create NYUSH through Diversity
+                </div>
+            </div>
             <div id="workspace">
-    <!-- 动态元素可以放在这里 -->
-</div>
-
+                <!-- 动态元素可以放在这里 -->
+            </div>
         </div>
     </div>
     <div id="contextMenu" class="context-menu">
@@ -314,11 +317,9 @@ workspace.addEventListener('drop', (event) => {
     event.preventDefault();
     const elementName = event.dataTransfer.getData('element');
 
-    // 检查是否是特殊元素
-    const isSpecialElement = ['Inclusion', 'LGBTQ', 'SexualOrientation', 'Diversity'].includes(elementName);
+    const isSpecialElement = ['Inclusion', 'LGBTQ', 'SexualOrientation'].includes(elementName);
     
     if (isSpecialElement) {
-        // 如果是特殊元素且未使用过，执行特殊处理
         if (!usedSpecialElements.has(elementName)) {
             usedSpecialElements.add(elementName);
             workspace.innerHTML = '';
@@ -364,24 +365,10 @@ workspace.addEventListener('drop', (event) => {
                     workspace.appendChild(workspaceElement);
                 });
             }
-            
-            if (elementName === 'Diversity') {
-                const diversityElements = ['Leadership', 'Engagement', 'Action', 'Dialogue'];
-                
-                diversityElements.forEach((element, index) => {
-                    addToElements(element);
-                    const workspaceElement = createWorkspaceElement(element);
-                    workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
-                    workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
-                    workspace.appendChild(workspaceElement);
-                });
-            }
         }
-        // 如果特殊元素已经使用过，不做任何处理
         return;
     }
     
-    // 处理普通元素的拖放
     if (draggedElement) {
         const rect = workspace.getBoundingClientRect();
         let x = event.clientX - rect.left + workspace.scrollLeft;
@@ -442,6 +429,14 @@ function checkCombination(newElement) {
                 workspace.removeChild(element);
                 workspace.appendChild(combinedElement);
                 addToElements(result);
+
+                // 检查是否达到终极目标
+                if (result === FINAL_GOAL && !hasReachedGoal) {
+                    hasReachedGoal = true;
+                    setTimeout(() => {
+                        showCongratulations();
+                    }, 500);
+                }
             }
         }
     });
@@ -610,15 +605,15 @@ function findHint(elements, recipes, usedCombinations) {
             // Check if the pair has already been used
             if (!usedCombinations.has(pair1) && recipes[pair1]) {
                 usedCombinations.add(pair1);
-                return `Combine ${elements[i]} and ${elements[j]} to form ${recipes[pair1]}`;
+                return `Try combining ${elements[i]} with ${elements[j]}`;
             }
             if (!usedCombinations.has(pair2) && recipes[pair2]) {
                 usedCombinations.add(pair2);
-                return `Combine ${elements[j]} and ${elements[i]} to form ${recipes[pair2]}`;
+                return `Try combining ${elements[j]} with ${elements[i]}`;
             }
         }
     }
-    return "No valid combination found.";
+    return "No valid combinations found at the moment.";
 }
 
 // Hint button functionality
@@ -636,6 +631,108 @@ document.getElementById('reset-button').addEventListener('click', resetProgress)
 
 // Load progress when the page loads
 window.addEventListener('load', loadProgress);
+
+// 在文件顶部添加常量
+const FINAL_GOAL = 'NYUSH';  // 终极目标
+let hasReachedGoal = false;  // 跟踪是否达到目标
+
+// 添加祝贺功能
+function showCongratulations() {
+    // Create modal with animation
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+        text-align: center;
+        color: white;
+        opacity: 0;
+        transition: all 0.5s ease-out;
+    `;
+
+    modal.innerHTML = `
+        <h2>Congratulations!</h2>
+        <p>You've successfully created the ultimate goal - NYUSH!</p>
+        <p>This represents your understanding of true diversity.</p>
+        <p>At NYUSH, we embrace all differences and create an inclusive, harmonious environment.</p>
+        <button onclick="closeModal(this.parentElement)" style="
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: white;
+            color: #ff9a9e;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        ">Continue Exploring</button>
+    `;
+
+    document.body.appendChild(modal);
+    
+    // Add confetti effect
+    createConfetti();
+
+    // Trigger entrance animation
+    setTimeout(() => {
+        modal.style.transform = 'translate(-50%, -50%) scale(1)';
+        modal.style.opacity = '1';
+    }, 100);
+}
+
+function closeModal(modal) {
+    modal.style.transform = 'translate(-50%, -50%) scale(0)';
+    modal.style.opacity = '0';
+    setTimeout(() => modal.remove(), 500);
+}
+
+// Add confetti effect
+function createConfetti() {
+    for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.cssText = `
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: ${getRandomColor()};
+            left: ${Math.random() * 100}vw;
+            top: -10px;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fall ${Math.random() * 3 + 2}s linear forwards;
+        `;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+function getRandomColor() {
+    const colors = ['#ff9a9e', '#fad0c4', '#fbc2eb', '#a18cd1', '#8ec5fc'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Add CSS for confetti animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    
+    .confetti {
+        pointer-events: none;
+        z-index: 1001;
+    }
+`;
+document.head.appendChild(style);
     </script>
     <div class="animated-bg"></div>
 
@@ -719,18 +816,6 @@ workspace.addEventListener('drop', (event) => {
             const workspaceElement = createWorkspaceElement(element);
             workspaceElement.style.left = `${(index % 5) * 150 + 50}px`;
             workspaceElement.style.top = `${Math.floor(index / 5) * 100 + 50}px`;
-            workspace.appendChild(workspaceElement);
-        });
-    }
-    
-    if (elementName === 'Diversity') {
-        const diversityElements = ['Leadership', 'Engagement', 'Action', 'Dialogue'];
-        
-        diversityElements.forEach((element, index) => {
-            addToElements(element);
-            const workspaceElement = createWorkspaceElement(element);
-            workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
-            workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
             workspace.appendChild(workspaceElement);
         });
     }
