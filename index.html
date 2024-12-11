@@ -127,18 +127,29 @@
     <script src="click-colorful.js"></script>
 
     <script>
-        // 处理点击事件
+        // 修改点击事件处理
         function playColor(e) {
-            // 使用 requestAnimationFrame 确保高效处理动画
+            // 检查点击目标是否是开始按钮
+            if (e.target.classList.contains('start-button')) {
+                // 如果是开始按钮，让链接正常工作
+                return;
+            }
+            
+            // 其他区域显示彩色动画
             requestAnimationFrame(() => {
                 var color = new colorBall();
                 color.fly(e.clientX, e.clientY);
             });
         }
 
-        // 处理触摸事件
+        // 修改触摸事件处理
         function touchPlayColor(e) {
-            // 使用 requestAnimationFrame 确保高效处理动画
+            // 检查触摸目标是否是开始按钮
+            if (e.target.classList.contains('start-button')) {
+                // 如果是开始按钮，让链接正常工作
+                return;
+            }
+            
             requestAnimationFrame(() => {
                 var color = new colorBall();
                 color.fly(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
@@ -147,7 +158,11 @@
             e.preventDefault();
         }
 
-    
+        // 为开始按钮添加单独的点击处理
+        document.querySelector('.start-button').addEventListener('click', (e) => {
+            // 允许默认的链接行为
+            e.stopPropagation();
+        });
 
         // 绑定点击和触摸事件
         document.body.addEventListener("click", playColor);
