@@ -426,76 +426,116 @@
 
 
         const recipes = {
-            // 第一层 - 直接从基础元素获得
-            "Gender,Culture": "Knowledge",        // 从性别和文化获得知识
-            "Race,Identity": "Experience",        // 从种族和身份获得经验
-            "Culture,Identity": "Mind",           // 从文化和身份获得思维 - 修改
-            "Race,Culture": "Heart",              // 从种族和文化获得情感 - 修改
-            "Culture,Race": "Ethnicity",          // 保持不变
-            
-            // 第二层 - 基础组合
-            "Knowledge,Experience": "Learning",    // 知识和经验结合
-            "Mind,Knowledge": "Perspective",      // 思维和知识产生视角
-            "Heart,Experience": "Emotion",        // 修改：情感从经验产生
-            "Identity,Experience": "Personality", // 修改：个性从身份和经验产生
-            
-            // 第三层 - 人与社会形成
-            "Personality,Mind": "People",         // 修改：人从个性和思维产生
-            "People,Knowledge": "Action",         // 人和知识产生行动
-            "People,Action": "Society",           // 人和行动形成社会
-            
-            // 第四层 - 社会结构
-            "Society,Knowledge": "Status",        // 社会和知识产生地位
-            "Status,Society": "Hierarchy",        // 地位和社会产生等级
-            "Hierarchy,Knowledge": "Rich",        // 修改：等级和知识产生富人
-            "Hierarchy,Experience": "Poor",       // 修改：等级和经验产生穷人
-            
-            // 第五层 - 社会阶层
-            "Rich,Poor": "Socialclass",           // 贫富形成社会阶级
-            "Socialclass,Rich": "UpperClass",     // 保持不变
-            "Socialclass,Poor": "LowerClass",     // 保持不变
-            
-            // 第六层 - 社会互动
-            "Society,Emotion": "Acceptance",      // 修改：社会和情感产生接纳
-            "Society,Perspective": "Rejection",   // 修改：社会和视角产生排斥
-            "People,Acceptance": "Inclusion",     // 保持不变
-            "People,Rejection": "Exclusion",      // 保持不变
-            
-            // 第七层 - 性别认同
-            "Gender,Knowledge": "Men",            // 保持不变
-            "Gender,Experience": "Women",         // 保持不变
-            "Gender,Mind": "Transgender",         // 保持不变
-            "Gender,Heart": "Cisgender",          // 保持不变
-            
-            // 第八层 - 文化与艺术
-            "Culture,Emotion": "Art",             // 修改：文化和情感产生艺术
-            "Culture,Mind": "Language",           // 保持不变
-            "Culture,Knowledge": "Tradition",     // 保持不变
-            "Culture,Experience": "Custom",       // 保持不变
-            
-            // 第九层 - 教育与发展
-            "Knowledge,Action": "Teaching",       // 保持不变
-            "Learning,Teaching": "Education",     // 保持不变
-            "Education,Society": "Academia",      // 保持不变
-            
-            // 第十层 - 领导力
-            "Action,Learning": "Skill",           // 修改：行动和学习产生技能
-            "Skill,Society": "Leadership",        // 保持不变
-            "Leadership,Action": "Engagement",    // 保持不变
-            "Leadership,Emotion": "Dialogue",     // 修改：领导力和情感产生对话
-            
-            // 多样性路径 - 保持所有路径
-            "Men,Women": "Diversity",             // 性别多样性
-            "UpperClass,LowerClass": "Diversity", // 阶层多样性
-            "Gay,Lesbian": "Diversity",           // 性向多样性
-            "Ethnicity,Ethnicity": "Diversity",   // 民族多样性
-            "Language,Custom": "Diversity",       // 文化多样性
-            "Education,Education": "Diversity",   // 教育多样性
-            "Art,Tradition": "Diversity",         // 艺术多样性
-            "Inclusion,Acceptance": "Diversity",  // 包容多样性
-            
-            // 终极目标
-            "Diversity,Diversity": "NYUSH"        // 最终目标
+    "Gender,Culture": "GenderNorms",
+    "Gender,Race": "Intersectionality",
+    "Gender,Identity": "Personality",
+    "Culture,Identity": "CulturalIdentity",
+    "Culture,Race": "Ethnicity",
+    "Race,Culture": "Ethnicity",
+    "Race,Identity": "RacialIdentity",
+    "Intersectionality,Identity": "SelfRecognition",
+    "Gender,SelfRecognition": "LGBTQ",
+    "Personality,SelfRecognition": "SexualOrientation",
+    "Homosexuality,Men": "Gay",
+    "Homosexuality,Women": "Lesbian",
+    "Transgender,Gay": "TransgenderGayMen",
+    "Transgender,Lesbian": "TransgenderLesbianWomen",
+    "Cisgender,Gay": "CisgenderGayMen",
+    "Cisgender,Lesbian": "CisgenderLesbianWomen",
+    "Identity,Personality": "People",
+    "Experience,Personality": "Memory",
+    "Memory,Experience": "Knowledge",
+    "Knowledge,Culture": "Language",
+    "Language,Culture": "Ethnicity",
+    "Ethnicity,Memory": "History",
+    "History,Culture": "Tradition",
+    "Tradition,Experience": "Custom",
+    "Identity,People": "Status",
+    "Personality,People": "Experience",
+    "Men,Men": "Gay",
+    "Women,Women": "Lesbian",
+    "People,People": "Diversity",
+    "Men,Women": "Diversity",
+    "LGBTQ,LGBTQ": "Diversity",
+    "Status,People": "Hierarchy",
+    "Hierarchy,Status": "Rich",
+    "Rich,Socialclass": "UpperClass",
+    "Rich,People": "Privilege",
+    "Privilege,Privilege": "Disparity",
+    "Disparity,Rich": "Poor",
+    "Poor,Rich": "Exclusion",
+    "People,Exclusion": "Minority",
+    "People,Inclusion": "Majority",
+    "Majority,Minority": "Society",
+    "Minority,Minority": "Stereotype",
+    "Minority,Stereotype": "Stigmatization",
+    "Poor,Socialclass": "LowerClass",
+    "Society,Society": "Diversity",
+    "Hierarchy,Hierarchy": "Socialclass",
+    "Society,Disparity": "Inequality",
+    "Diversity,Inclusion": "Harmony",
+    "Diversity,Exclusion": "Conflict",
+    "Engagement,Action": "Participation",
+    "Leadership,Dialogue": "Communication",
+    "Communication,Participation": "Harmony",
+    "Race,Conflict": "Racism",
+    "Race,Inequality": "Racism",
+    "Racism,Stereotype": "Prejudice",
+    "Culture,Gender": "GenderNorms",
+    "Race,Gender": "Intersectionality",
+    "Identity,Gender": "Personality",
+    "Identity,Culture": "CulturalIdentity",
+    "Identity,Race": "RacialIdentity",
+    "Identity,Intersectionality": "SelfRecognition",
+    "SelfRecognition,Gender": "LGBTQ",
+    "SelfRecognition,Personality": "SexualOrientation",
+    "Men,Homosexuality": "Gay",
+    "Women,Homosexuality": "Lesbian",
+    "Gay,Transgender": "TransgenderGayMen",
+    "Lesbian,Transgender": "TransgenderLesbianWomen",
+    "Gay,Cisgender": "CisgenderGayMen",
+    "Lesbian,Cisgender": "CisgenderLesbianWomen",
+    "Personality,Identity": "People",
+    "Personality,Experience": "Memory",
+    "Experience,Memory": "Knowledge",
+    "Culture,Knowledge": "Language",
+    "Culture,Language": "Ethnicity",
+    "Memory,Ethnicity": "History",
+    "Culture,History": "Tradition",
+    "Experience,Tradition": "Custom",
+    "People,Identity": "Status",
+    "People,Personality": "Experience",
+    "Men,Men": "Gay",
+    "Women,Women": "Lesbian",
+    "People,People": "Diversity",
+    "Women,Men": "Diversity",
+    "LGBTQ,LGBTQ": "Diversity",
+    "People,Status": "Hierarchy",
+    "Status,Hierarchy": "Rich",
+    "Socialclass,Rich": "UpperClass",
+    "People,Rich": "Privilege",
+    "Privilege,Privilege": "Disparity",
+    "Rich,Disparity": "Poor",
+    "Rich,Exclusion": "Poor",
+    "Exclusion,People": "Minority",
+    "Inclusion,People": "Majority",
+    "Minority,Majority": "Society",
+    "Minority,Minority": "Stereotype",
+    "Stereotype,Minority": "Stigmatization",
+    "Socialclass,Poor": "LowerClass",
+    "Society,Society": "Diversity",
+    "Hierarchy,Hierarchy": "Socialclass",
+    "Disparity,Society": "Inequality",
+    "Inclusion,Diversity": "Harmony",
+    "Exclusion,Diversity": "Conflict",
+    "Action,Engagement": "Participation",
+    "Dialogue,Leadership": "Communication",
+    "Participation,Communication": "Harmony",
+    "Conflict,Race": "Racism",
+    "Inequality,Race": "Racism",
+    "Stereotype,Racism": "Prejudice",
+    "Diversity,Diversity": "NYUSH"
+
         };
 
 
