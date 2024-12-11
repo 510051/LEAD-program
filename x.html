@@ -232,6 +232,146 @@
                 margin: 5px;
             }
         }
+
+        /* 桌面版布局 */
+        @media screen and (min-width: 769px) {
+            .game-container {
+                display: flex;
+                height: 80vh;
+            }
+
+            #elements-section {
+                width: 220px;
+            }
+
+            #workspace-container {
+                flex-grow: 1;
+                margin-left: 20px;
+            }
+
+            .gamename {
+                margin-left: 600px;
+            }
+        }
+
+        /* 移动版布局 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .gamename {
+                margin: 0;
+                text-align: center;
+                font-size: 24px;
+            }
+
+            .game-container {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+            }
+
+            #elements-section {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            #elements-container {
+                max-height: 150px;  /* 限制元素列表高度 */
+                overflow-y: auto;
+            }
+
+            .element {
+                padding: 12px;
+                font-size: 14px;
+                margin: 5px 0;
+            }
+
+            #workspace-container {
+                margin: 0;
+                height: calc(100vh - 400px);  /* 动态计算工作区高度 */
+                min-height: 300px;
+            }
+
+            #workspace {
+                height: 100%;
+                position: relative;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;  /* 平滑滚动 */
+            }
+
+            .workspace-element {
+                min-width: 80px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+            }
+
+            /* 按钮组样式优化 */
+            .button-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin: 10px 0;
+            }
+
+            #save-button, #load-button, #reset-button {
+                width: 100%;
+                height: 44px;
+                font-size: 14px;
+                margin: 0;
+            }
+
+            #reset-button {
+                grid-column: 1 / -1;  /* 跨越所有列 */
+            }
+
+            /* 提示区域样式 */
+            .hint-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                margin: 10px 0;
+            }
+
+            #hintButton {
+                width: 100%;
+                height: 44px;
+                margin: 0;
+            }
+
+            .goal-text {
+                font-size: 12px;
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        /* 触摸优化 */
+        @media (hover: none) {
+            .element, .workspace-element, button {
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            #workspace {
+                touch-action: pan-x pan-y;
+            }
+
+            /* 添加触摸反馈 */
+            .element:active, .workspace-element:active {
+                opacity: 0.7;
+                transform: scale(0.98);
+            }
+
+            button:active {
+                opacity: 0.8;
+            }
+        }
     </style>
 </head>
 <body>
@@ -253,9 +393,9 @@
         </div>
         <div id="workspace-container">
             <h3>Drag elements here to combine</h3>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="hint-container">
                 <button id="hintButton">Hint</button>
-                <div style="color: #666; font-style: italic;">
+                <div class="goal-text">
                     Ultimate Goal: Create NYUSH through Diversity
                 </div>
             </div>
@@ -921,18 +1061,39 @@ document.querySelector('meta[name="viewport"]').content =
     <script src="click-colorful.js"></script>
   
     <script>
-        // 处理点击事件
+        // 修改点击事件处理
         function playColor(e) {
-            // 使用 requestAnimationFrame 确保高效处理动画
+            // 检查点击目标是否是交互元素
+            if (e.target.classList.contains('element') || 
+                e.target.classList.contains('workspace-element') ||
+                e.target.classList.contains('button-row') ||
+                e.target.tagName === 'BUTTON' ||
+                e.target.id === 'workspace' ||
+                e.target.id === 'elements-container' ||
+                e.target.id === 'search-box') {
+                return;
+            }
+            
+            // 其他区域显示彩色动画
             requestAnimationFrame(() => {
                 var color = new colorBall();
                 color.fly(e.clientX, e.clientY);
             });
         }
-  
-        // 处理触摸事件
+
+        // 修改触摸事件处理
         function touchPlayColor(e) {
-            // 使用 requestAnimationFrame 确保高效处理动画
+            // 检查触摸目标是否是交互元素
+            if (e.target.classList.contains('element') || 
+                e.target.classList.contains('workspace-element') ||
+                e.target.classList.contains('button-row') ||
+                e.target.tagName === 'BUTTON' ||
+                e.target.id === 'workspace' ||
+                e.target.id === 'elements-container' ||
+                e.target.id === 'search-box') {
+                return;
+            }
+            
             requestAnimationFrame(() => {
                 var color = new colorBall();
                 color.fly(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
@@ -940,71 +1101,27 @@ document.querySelector('meta[name="viewport"]').content =
             e.stopPropagation();
             e.preventDefault();
         }
+
+        // 为工作区添加单独的事件处理
+        document.getElementById('workspace').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        document.getElementById('elements-container').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // 为按钮添加单独的事件处理
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
+
+        // 绑定点击和触摸事件
         document.body.addEventListener("click", playColor);
-    document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
-
-
-        // In the dragStart function, set the dataTransfer to include 'Inclusion' when the element is dragged
-function dragStart(e) {
-    draggedElement = this;
-    e.dataTransfer.setData('element', this.textContent); // Set the content of the dragged element as 'element'
-    setTimeout(() => this.style.opacity = '0.5', 0);
-    isDraggingWorkspaceElement = this.classList.contains('workspace-element');
-}
-
-// In the drop event listener, use the correct logic to handle the drag-and-drop
-workspace.addEventListener('drop', (event) => {
-    event.preventDefault();
-    const elementName = event.dataTransfer.getData('element'); // Retrieve the element's name
-
-    if (elementName === 'Inclusion') {
-        workspace.innerHTML = '';
-        
-        const elements = ['Gender', 'Culture', 'Race', 'Identity'];
-        
-        elements.forEach((element, index) => {
-            addToElements(element);
-            const workspaceElement = createWorkspaceElement(element);
-            workspaceElement.style.left = `${(index % 2) * 150 + 50}px`;
-            workspaceElement.style.top = `${Math.floor(index / 2) * 100 + 50}px`;
-            workspace.appendChild(workspaceElement);
-        });
-    }
-    
-    if (elementName === 'LGBTQ') {
-        const lgbtqElements = [
-            'Men', 'Women', 'Identify As Men', 'Identify As Women',
-            'Transgender', 'Non-binary', 'Cisgender', 'Gender Non-Conforming'
-        ];
-        
-        lgbtqElements.forEach((element, index) => {
-            addToElements(element);
-            const workspaceElement = createWorkspaceElement(element);
-            workspaceElement.style.left = `${(index % 4) * 150 + 50}px`;
-            workspaceElement.style.top = `${Math.floor(index / 4) * 100 + 50}px`;
-            workspace.appendChild(workspaceElement);
-        });
-    }
-    
-    if (elementName === 'SexualOrientation') {
-        const orientationElements = [
-            'Heterosexual', 'Homosexuality', 'Pansexuality', 'Bisexuality',
-            'Queer', 'Asexuality', 'Two-Spirit', 'Intersex',
-            'Questioning', 'Same-Gender Loving'
-        ];
-        
-        orientationElements.forEach((element, index) => {
-            addToElements(element);
-            const workspaceElement = createWorkspaceElement(element);
-            workspaceElement.style.left = `${(index % 5) * 150 + 50}px`;
-            workspaceElement.style.top = `${Math.floor(index / 5) * 100 + 50}px`;
-            workspace.appendChild(workspaceElement);
-        });
-    }
-});
-
-
-      </script>
+        document.body.addEventListener("touchstart", touchPlayColor, { passive: false });
+    </script>
   
     <footer>
         <p>Special thanks to <a href="https://github.com/Neil-Mani/NeilCraft">NeilCraft</a> for their open-source contribution!</p>
