@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <link rel="icon" href="1.webp">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         /* 页面和背景样式 */
         body, html, .main {
@@ -85,9 +87,44 @@
         button:focus {
             outline: none;
         }
+
+        /* 移动端响应式样式 */
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                padding: 0 15px;
+            }
+            
+            p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            button {
+                padding: 15px 30px;  /* 增大按钮点击区域 */
+                font-size: 1.2rem;
+                margin: 20px;
+                min-width: 200px;  /* 确保按钮足够大 */
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* 触摸优化 */
+        @media (hover: none) {
+            button {
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+            
+            button:active {
+                transform: scale(0.95);
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+        }
     </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diversity Game</title>
     
 </head>
@@ -97,7 +134,9 @@
     <div class="content">
         <h1>Welcome to the Diversity Game</h1>
         <p>Explore the beauty of inclusion and harmony.</p>
-        <button onclick="window.location.href='x.html'">Get Started</button>
+        <a href="x.html" style="text-decoration: none;">
+            <button type="button">Get Started</button>
+        </a>
     </div>
 
     <!-- 动态背景 -->

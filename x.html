@@ -193,6 +193,45 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+
+        /* 修改按钮样式使其更适合触摸 */
+        #save-button, #load-button, #reset-button, #hintButton {
+            min-height: 44px;  /* 最小触摸区域 */
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        @media screen and (max-width: 768px) {
+            /* 调整按钮布局 */
+            .button-row {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            #save-button, #load-button, #reset-button {
+                width: 100%;
+                height: 44px;
+                font-size: 16px;
+            }
+
+            /* 优化工作区域 */
+            #workspace {
+                min-height: 400px;
+                touch-action: none;  /* 防止系统手势干扰 */
+            }
+
+            /* 优化元素大小 */
+            .element, .workspace-element {
+                min-width: 80px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -792,41 +831,49 @@ document.head.appendChild(style);
 
 // 添加触摸事件支持
 function addTouchListeners(element) {
-    let touchStartX = 0;
-    let touchStartY = 0;
+    let initialX, initialY;
+    let elementX, elementY;
 
     element.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        this.style.opacity = '0.5';
-        draggedElement = this;
+        if (e.touches.length === 1) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            initialX = touch.clientX;
+            initialY = touch.clientY;
+            
+            if (this.classList.contains('workspace-element')) {
+                elementX = parseFloat(this.style.left) || 0;
+                elementY = parseFloat(this.style.top) || 0;
+            }
+            
+            this.style.opacity = '0.5';
+            draggedElement = this;
+        }
     }, { passive: false });
 
     element.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        if (draggedElement) {
+        if (draggedElement && e.touches.length === 1) {
+            e.preventDefault();
             const touch = e.touches[0];
-            const rect = workspace.getBoundingClientRect();
-            let x = touch.clientX - rect.left;
-            let y = touch.clientY - rect.top;
-
+            const deltaX = touch.clientX - initialX;
+            const deltaY = touch.clientY - initialY;
+            
             if (this.classList.contains('workspace-element')) {
-                this.style.left = `${x}px`;
-                this.style.top = `${y}px`;
+                this.style.left = `${elementX + deltaX}px`;
+                this.style.top = `${elementY + deltaY}px`;
             }
         }
     }, { passive: false });
 
     element.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        this.style.opacity = '1';
-        
         if (draggedElement) {
+            e.preventDefault();
+            this.style.opacity = '1';
+            
             const touch = e.changedTouches[0];
             const rect = workspace.getBoundingClientRect();
-            let x = touch.clientX - rect.left;
-            let y = touch.clientY - rect.top;
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
 
             if (!this.classList.contains('workspace-element')) {
                 const newElement = createWorkspaceElement(this.textContent);
@@ -836,9 +883,8 @@ function addTouchListeners(element) {
             }
 
             checkCombination(draggedElement);
+            draggedElement = null;
         }
-        
-        draggedElement = null;
     }, { passive: false });
 }
 
