@@ -136,6 +136,63 @@
             width: 15%;
             margin-bottom: 10px;
         }
+        /* 添加移动设备响应式样式 */
+        @media screen and (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+
+            #elements-section {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            #workspace-container {
+                margin-left: 0;
+                margin-top: 20px;
+                height: 60vh;
+            }
+
+            .gamename {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .element, .workspace-element {
+                padding: 8px;
+                font-size: 12px;
+                margin-bottom: 3px;
+            }
+
+            #hintButton {
+                width: 30%;
+            }
+
+            .button-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            #save-button, #load-button {
+                width: 100%;
+            }
+        }
+
+        /* 添加触摸优化样式 */
+        @media (hover: none) {
+            .element, .workspace-element {
+                touch-action: none;
+                user-select: none;
+                -webkit-user-select: none;
+            }
+
+            #workspace {
+                touch-action: pan-x pan-y;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
     </style>
 </head>
 <body>
@@ -245,7 +302,6 @@
     "Race,Conflict": "Racism",
     "Race,Inequality": "Racism",
     "Racism,Stereotype": "Prejudice",
-    "Diversity,Diversity": "NYUSH",
     "Culture,Gender": "GenderNorms",
     "Race,Gender": "Intersectionality",
     "Identity,Gender": "Personality",
@@ -733,6 +789,86 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// 添加触摸事件支持
+function addTouchListeners(element) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    element.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        this.style.opacity = '0.5';
+        draggedElement = this;
+    }, { passive: false });
+
+    element.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        if (draggedElement) {
+            const touch = e.touches[0];
+            const rect = workspace.getBoundingClientRect();
+            let x = touch.clientX - rect.left;
+            let y = touch.clientY - rect.top;
+
+            if (this.classList.contains('workspace-element')) {
+                this.style.left = `${x}px`;
+                this.style.top = `${y}px`;
+            }
+        }
+    }, { passive: false });
+
+    element.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        this.style.opacity = '1';
+        
+        if (draggedElement) {
+            const touch = e.changedTouches[0];
+            const rect = workspace.getBoundingClientRect();
+            let x = touch.clientX - rect.left;
+            let y = touch.clientY - rect.top;
+
+            if (!this.classList.contains('workspace-element')) {
+                const newElement = createWorkspaceElement(this.textContent);
+                newElement.style.left = `${x}px`;
+                newElement.style.top = `${y}px`;
+                workspace.appendChild(newElement);
+            }
+
+            checkCombination(draggedElement);
+        }
+        
+        draggedElement = null;
+    }, { passive: false });
+}
+
+// 修改元素创建函数，添加触摸支持
+function createWorkspaceElement(name) {
+    const newElement = document.createElement('div');
+    newElement.className = 'workspace-element';
+    newElement.textContent = name;
+    newElement.draggable = true;
+    addDragListeners(newElement);
+    addTouchListeners(newElement);
+    return newElement;
+}
+
+// 修改添加元素函数，添加触摸支持
+function addToElements(name) {
+    if (!elementExists(name)) {
+        const newElement = document.createElement('div');
+        newElement.className = 'element';
+        newElement.textContent = name;
+        newElement.draggable = true;
+        addDragListeners(newElement);
+        addTouchListeners(newElement);
+        elements.appendChild(newElement);
+    }
+}
+
+// 添加视口元数据
+document.querySelector('meta[name="viewport"]').content = 
+    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
     </script>
     <div class="animated-bg"></div>
 
