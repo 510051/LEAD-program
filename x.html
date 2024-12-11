@@ -426,113 +426,79 @@
 
 
         const recipes = {
-            // 基础性别相关组合
-            "Gender,Culture": "GenderNorms",
-            "Gender,Race": "Intersectionality",
-            "Gender,Identity": "Personality",
-            "Men,Men": "Gay",
-            "Women,Women": "Lesbian",
-            "Men,Women": "Diversity",         // 性别多样性路径
+            // 第一层 - 基础概念形成
+            "Gender,Culture": "Knowledge",        // 从性别和文化的交互获得知识
+            "Race,Identity": "Experience",        // 从种族和身份的交互获得经验
+            "Gender,Identity": "Mind",            // 从性别和身份的交互获得思维
+            "Culture,Identity": "Heart",          // 从文化和身份的交互获得情感
+            "Culture,Race": "Ethnicity",          // 从文化和种族的交互获得民族性
             
-            // 基础文化相关组合
-            "Culture,Identity": "CulturalIdentity",
-            "Culture,Race": "Ethnicity",
-            "Culture,Knowledge": "Language",
-            "Culture,History": "Tradition",
-            "Culture,Language": "Ethnicity",
-            "Tradition,Custom": "Diversity",  // 文化多样性路径
+            // 第二层 - 人与社会
+            "Mind,Heart": "Emotion",              // 思维和情感结合
+            "Knowledge,Experience": "Learning",    // 知识和经验结合
+            "Mind,Knowledge": "Perspective",      // 思维和知识产生视角
+            "Heart,Experience": "Personality",    // 情感和经验形成个性
+            "Identity,Personality": "People",      // 身份和个性形成人
+            "People,Knowledge": "Action",         // 人和知识产生行动
             
-            // 基础种族相关组合
-            "Race,Identity": "RacialIdentity",
-            "Race,Culture": "Ethnicity",
-            "Race,Conflict": "Racism",
-            "Race,Inequality": "Racism",
-            "Ethnicity,Ethnicity": "Diversity",  // 种族多样性路径
+            // 第三层 - 社会结构
+            "People,Action": "Society",           // 人和行动形成社会
+            "Society,Knowledge": "Status",        // 社会和知识产生地位
+            "Status,Society": "Hierarchy",        // 地位和社会产生等级
+            "Hierarchy,Status": "Rich",           // 等级和地位产生富人
+            "Hierarchy,Society": "Poor",          // 等级和社会产生穷人
             
-            // 身份认同相关组合
-            "Identity,Intersectionality": "SelfRecognition",
-            "Identity,Personality": "People",
-            "Identity,People": "Status",
-            "SelfRecognition,Gender": "LGBTQ",
-            "SelfRecognition,Personality": "SexualOrientation",
-            "LGBTQ,LGBTQ": "Diversity",      // 性向多样性路径
+            // 第四层 - 社会阶层
+            "Rich,Poor": "Socialclass",           // 贫富形成社会阶级
+            "Socialclass,Rich": "UpperClass",     // 社会阶级和富人形成上层阶级
+            "Socialclass,Poor": "LowerClass",     // 社会阶级和穷人形成下层阶级
             
-            // 社会阶层相关组合
-            "People,Status": "Hierarchy",
-            "Status,Hierarchy": "Rich",
-            "Socialclass,Rich": "UpperClass",
-            "Socialclass,Poor": "LowerClass",
-            "UpperClass,LowerClass": "Diversity",  // 阶层多样性路径
+            // 第五层 - 社会互动
+            "Society,Heart": "Acceptance",        // 社会和情感产生接纳
+            "Society,Mind": "Rejection",          // 社会和思维产生排斥
+            "People,Acceptance": "Inclusion",     // 人和接纳产生包容
+            "People,Rejection": "Exclusion",      // 人和排斥产生排除
             
-            // 社会包容与排斥相关组合
-            "Exclusion,People": "Minority",
-            "Inclusion,People": "Majority",
-            "Minority,Majority": "Society",
-            "Society,Society": "Diversity",   // 社会多样性路径
+            // 第六层 - 性别认同
+            "Gender,Knowledge": "Men",            // 性别和知识产生男性
+            "Gender,Experience": "Women",         // 性别和经验产生女性
+            "Gender,Mind": "Transgender",         // 性别和思维产生跨性别
+            "Gender,Heart": "Cisgender",          // 性别和情感产生顺性别
             
-            // 经验与知识相关组合
-            "Experience,Personality": "Memory",
-            "Experience,Memory": "Knowledge",
-            "Experience,Tradition": "Custom",
-            "Knowledge,Custom": "Culture",
-            "Culture,Culture": "Diversity",   // 知识文化多样性路径
+            // 第七层 - 性取向
+            "Men,Men": "Gay",                     // 男性和男性
+            "Women,Women": "Lesbian",             // 女性和女性
+            "Heart,Gender": "SexualOrientation",  // 情感和性别产生性取向
             
-            // 领导力与参与相关组合
-            "Action,Engagement": "Participation",
-            "Dialogue,Leadership": "Communication",
-            "Participation,Communication": "Harmony",
-            "Harmony,Harmony": "Diversity",   // 和谐多样性路径
+            // 第八层 - 文化与艺术
+            "Culture,Heart": "Art",               // 文化和情感产生艺术
+            "Culture,Mind": "Language",           // 文化和思维产生语言
+            "Culture,Knowledge": "Tradition",     // 文化和知识产生传统
+            "Culture,Experience": "Custom",       // 文化和经验产生习俗
             
-            // 教育相关组合
-            "Knowledge,Experience": "Learning",
-            "Learning,Teaching": "Education",
-            "Education,Culture": "Academia",
-            "Education,Education": "Diversity",   // 教育多样性路径
-
-            // 语言相关组合
-            "Culture,Expression": "Language",
-            "Language,Identity": "MotherTongue",
-            "Language,Learning": "Bilingual",
-            "Bilingual,Bilingual": "Diversity",  // 语言多样性路径
-
-            // 艺术与表达相关组合
-            "Culture,Creativity": "Art",
-            "Art,Emotion": "Expression",
-            "Art,Culture": "Heritage",
-            "Art,Art": "Diversity",              // 艺术多样性路径
-
-            // 思维方式相关组合
-            "Knowledge,Perspective": "Mindset",
-            "Mindset,Culture": "Worldview",
-            "Mindset,Experience": "Philosophy",
-            "Worldview,Worldview": "Diversity",  // 思维多样性路径
-
-            // 年龄代际相关组合
-            "Experience,Time": "Age",
-            "Age,Knowledge": "Wisdom",
-            "Age,Culture": "Generation",
-            "Generation,Generation": "Diversity", // 代际多样性路径
-
-            // 职业相关组合
-            "Knowledge,Skill": "Profession",
-            "Experience,Training": "Expertise",
-            "Profession,Passion": "Career",
-            "Profession,Profession": "Diversity", // 职业多样性路径
-
-            // 家庭结构相关组合
-            "People,Love": "Family",
-            "Family,Culture": "Tradition",
-            "Family,Identity": "Heritage",
-            "Family,Family": "Diversity",        // 家庭多样性路径
-
-            // 能力相关组合
-            "Body,Mind": "Ability",
-            "Ability,Challenge": "Adaptation",
-            "Ability,Support": "Empowerment",
-            "Ability,Ability": "Diversity",      // 能力多样性路径
-
+            // 第九层 - 教育与发展
+            "Knowledge,Action": "Teaching",       // 知识和行动产生教学
+            "Learning,Teaching": "Education",     // 学习和教学产生教育
+            "Education,Society": "Academia",      // 教育和社会产生学术界
+            
+            // 第十层 - 领导力
+            "Action,Knowledge": "Skill",          // 行动和知识产生技能
+            "Skill,Society": "Leadership",        // 技能和社会产生领导力
+            "Leadership,Action": "Engagement",    // 领导力和行动产生参与
+            "Leadership,Heart": "Dialogue",       // 领导力和情感产生对话
+            
+            // 多样性路径
+            "Men,Women": "Diversity",             // 性别多样性
+            "UpperClass,LowerClass": "Diversity", // 阶层多样性
+            "Gay,Lesbian": "Diversity",           // 性向多样性
+            "Ethnicity,Ethnicity": "Diversity",   // 民族多样性
+            "Language,Custom": "Diversity",       // 文化多样性
+            "Education,Education": "Diversity",   // 教育多样性
+            "Art,Tradition": "Diversity",         // 艺术多样性
+            "Inclusion,Acceptance": "Diversity",  // 包容多样性
+            
             // 终极目标
-            "Diversity,Diversity": "NYUSH"    // 最终目标
+            "Diversity,Diversity": "NYUSH"        // 最终目标
         };
 
 
